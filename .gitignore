@@ -59,3 +59,13 @@ typings/
 
 # next.js build output
 .next
+
+# serverless framework settings
+.serverless
+
+# IDEA setting files
+serverless-log-analysis.iml
+.idea
+
+# TypeScript build output
+dist

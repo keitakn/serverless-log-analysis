@@ -1,0 +1,56 @@
+service: serverless-log-analysis
+
+plugins:
+  - serverless-plugin-warmup
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ap-northeast-1
+  stage: ${env:DEPLOY_STAGE}
+  logRetentionInDays: 30
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 'athena:*'
+        - firehose:DeleteDeliveryStream
+        - firehose:PutRecord
+        - firehose:PutRecordBatch
+        - firehose:UpdateDestination
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+        - 's3:*'
+      Resource: '*'
+  environment:
+    DEPLOY_STAGE: ${env:DEPLOY_STAGE}
+
+package:
+  exclude:
+    - .git/**
+    - .nyc_output/**
+    - coverage/**
+    - .idea/**
+    - src/**
+    - node_modules/.bin/**
+    - node_modules/.cache/**
+
+custom:
+  warmup:
+    prewarm: true
+  prune:
+    automatic: true
+    number: 3
+
+functions:
+  convertToHiveFormat:
+    handler: dist/app/function/s3.convertToHiveFormat
+    warmup: true
+    events:
+      - s3:
+          bucket: serverless-log-analysis-logs-${env:DEPLOY_STAGE}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: raw/
+
