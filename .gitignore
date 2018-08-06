@@ -66,3 +66,6 @@ typings/
 # IDEA setting files
 serverless-log-analysis.iml
 .idea
+
+# TypeScript build output
+dist
