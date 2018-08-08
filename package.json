@@ -9,7 +9,19 @@
     "tslint": "tslint --project tsconfig.json --config tslint.json 'src/**/*.{ts,tsx}' 'test/**/*.{ts,tsx}'",
     "tslint:check": "tslint-config-prettier-check ./tslint.json",
     "format": "tslint --project tsconfig.json --config tslint.json --fix 'src/**/*.{ts,tsx}' 'test/**/*.{ts,tsx}'",
-    "build": "tsc"
+    "build": "tsc",
+    "deploy:qa": "yarn run build && DEPLOY_STAGE=qa serverless deploy -v",
+    "deploy:dev": "yarn run build && DEPLOY_STAGE=dev serverless deploy -v",
+    "deploy:stg": "yarn run build && DEPLOY_STAGE=stg serverless deploy -v",
+    "deploy:prd": "yarn run build && DEPLOY_STAGE=prd serverless deploy -v",
+    "logs:qa": "serverless logs -s qa",
+    "logs:dev": "serverless logs -s dev",
+    "logs:stg": "serverless logs -s stg",
+    "logs:prd": "serverless logs -s prd",
+    "remove:qa": "DEPLOY_STAGE=qa serverless remove -v",
+    "remove:dev": "DEPLOY_STAGE=dev serverless remove -v",
+    "remove:stg": "DEPLOY_STAGE=stg serverless remove -v",
+    "remove:prd": "DEPLOY_STAGE=prd serverless remove -v"
   },
   "repository": {
     "type": "git",
