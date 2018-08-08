@@ -1,0 +1,64 @@
+Resources:
+  FirehoseRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${env:DEPLOY_STAGE}-firehose-role
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - firehose.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+      - PolicyName: FirehoseToS3Policy
+        PolicyDocument:
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:AbortMultipartUpload
+                - s3:GetBucketLocation
+                - s3:GetObject
+                - s3:ListBucket
+                - s3:ListBucketMultipartUploads
+                - s3:PutObject
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
+  AthenaQueryResultsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      BucketName: serverless-log-analysis-athena-query-results-${env:DEPLOY_STAGE}
+  KinesisFirehoseLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: /aws/kinesisfirehose/${env:DEPLOY_STAGE}-log-delivery-stream
+  KinesisFirehoseLogStream:
+    Type: "AWS::Logs::LogStream"
+    Properties:
+      LogGroupName:
+        Ref: KinesisFirehoseLogGroup
+      LogStreamName: S3Delivery
+  KinesisFirehose:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      DeliveryStreamName: ${env:DEPLOY_STAGE}-log-delivery-stream
+      S3DestinationConfiguration:
+        BucketARN: { Fn::GetAtt: [ "S3BucketServerlessloganalysislogs${env:DEPLOY_STAGE}", Arn ] }
+        BufferingHints:
+          IntervalInSeconds: '60'
+          SizeInMBs: '5'
+        CloudWatchLoggingOptions:
+          Enabled: true
+          LogGroupName:
+            Ref: KinesisFirehoseLogGroup
+          LogStreamName:
+            Ref: KinesisFirehoseLogStream
+        CompressionFormat: 'UNCOMPRESSED'
+        Prefix: 'raw/'
+        RoleARN: { Fn::GetAtt: [ FirehoseRole, Arn ] }
+
+

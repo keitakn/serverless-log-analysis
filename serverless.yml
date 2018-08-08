@@ -54,3 +54,4 @@ functions:
           rules:
             - prefix: raw/
 
+resources: ${file(resources.yml)}
