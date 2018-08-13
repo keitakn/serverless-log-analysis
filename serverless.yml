@@ -45,7 +45,7 @@ custom:
 
 functions:
   convertToHiveFormat:
-    handler: dist/app/function/s3.convertToHiveFormat
+    handler: dist/src/app/function/s3.convertToHiveFormat
     warmup: true
     events:
       - s3:
