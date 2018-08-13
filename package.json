@@ -53,6 +53,7 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
+    "@nekonomokochan/aws-lambda-node-logger": "^1.0.1",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "source-map-support": "^0.5.6"
