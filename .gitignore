@@ -62,6 +62,7 @@ typings/
 
 # serverless framework settings
 .serverless
+event.json
 
 # IDEA setting files
 serverless-log-analysis.iml
