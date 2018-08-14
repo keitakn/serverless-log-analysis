@@ -74,5 +74,10 @@ functions:
     handler: dist/src/app/function/athena.addPartition
     warmup: true
     timeout: 30
+  athenaAllTablePartitionAdd:
+    handler: dist/src/app/function/schedule.athenaAllTablePartitionAdd
+    events:
+      - schedule: cron(0 16 * * ? *)
+    timeout: 30
 
 resources: ${file(resources.yml)}
