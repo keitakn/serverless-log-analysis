@@ -14,6 +14,7 @@ provider:
     - Effect: Allow
       Action:
         - 'athena:*'
+        - 'glue:*'
         - firehose:DeleteDeliveryStream
         - firehose:PutRecord
         - firehose:PutRecordBatch
@@ -53,5 +54,25 @@ functions:
           event: s3:ObjectCreated:*
           rules:
             - prefix: raw/
+  createDatabase:
+    handler: dist/src/app/function/athena.createDatabase
+    warmup: true
+    timeout: 30
+  createAllDatabase:
+    handler: dist/src/app/function/athena.createAllDatabase
+    warmup: true
+    timeout: 30
+  createTable:
+    handler: dist/src/app/function/athena.createTable
+    warmup: true
+    timeout: 30
+  createAllTable:
+    handler: dist/src/app/function/athena.createAllTable
+    warmup: true
+    timeout: 30
+  addPartition:
+    handler: dist/src/app/function/athena.addPartition
+    warmup: true
+    timeout: 30
 
 resources: ${file(resources.yml)}
