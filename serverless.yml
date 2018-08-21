@@ -3,6 +3,7 @@ service: serverless-log-analysis
 plugins:
   - serverless-plugin-warmup
   - serverless-prune-plugin
+  - serverless-s3-remover
 
 provider:
   name: aws
@@ -43,6 +44,10 @@ custom:
   prune:
     automatic: true
     number: 3
+  remover:
+    buckets:
+      - serverless-log-analysis-logs-${env:DEPLOY_STAGE}
+      - serverless-log-analysis-athena-query-results-${env:DEPLOY_STAGE}
 
 functions:
   convertToHiveFormat:
