@@ -1,4 +1,7 @@
 # serverless-log-analysis
+
+[![Build Status](https://travis-ci.org/keitakn/serverless-log-analysis.svg?branch=master)](https://travis-ci.org/keitakn/serverless-log-analysis)
+
 Analyze logs using "Amazon Kinesis Data Firehose" and "Amazon Athena"
 
 ## Description of npm script
